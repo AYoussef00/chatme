@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, router } from '@inertiajs/vue3';
 import AppSidebarLayout from '@/layouts/app/AppSidebarLayout.vue';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Plus, Edit, Trash2 } from 'lucide-vue-next';
+import { ref } from 'vue';
 
 interface Plan {
     id: number;
@@ -21,6 +22,25 @@ interface Props {
 }
 
 defineProps<Props>();
+
+// Reactive data
+const isDeleting = ref<number | null>(null);
+
+// Functions
+const deletePlan = (planId: number) => {
+    if (confirm('Are you sure you want to delete this plan? This action cannot be undone.')) {
+        isDeleting.value = planId;
+
+        router.delete(`/admin/plans/${planId}`, {
+            onSuccess: () => {
+                isDeleting.value = null;
+            },
+            onError: () => {
+                isDeleting.value = null;
+            }
+        });
+    }
+};
 </script>
 
 <template>
@@ -64,7 +84,7 @@ defineProps<Props>();
                     <CardContent>
                         <div class="space-y-4">
                             <div class="text-center">
-                                <span class="text-3xl font-bold text-gray-900">${{ plan.price }}</span>
+                                <span class="text-3xl font-bold text-gray-900">${{ Math.round(plan.price) }}</span>
                                 <span class="text-gray-600 ml-2">/{{ plan.duration }}</span>
                             </div>
 
@@ -85,9 +105,16 @@ defineProps<Props>();
                                         Edit
                                     </Button>
                                 </Link>
-                                <Button variant="outline" size="sm" class="flex items-center gap-2 text-red-600 hover:text-red-700">
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    @click="deletePlan(plan.id)"
+                                    :disabled="isDeleting === plan.id"
+                                    class="flex items-center gap-2 text-red-600 hover:text-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
                                     <Trash2 class="w-4 h-4" />
-                                    Delete
+                                    <span v-if="isDeleting === plan.id">Deleting...</span>
+                                    <span v-else>Delete</span>
                                 </Button>
                             </div>
                         </div>

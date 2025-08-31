@@ -77,8 +77,9 @@ const toggleAuthMode = () => {
 };
 
 const startFreeChat = () => {
-    // Redirect to chat page
-    window.location.href = '/chat';
+    // Close plans modal and show login modal
+    closePlans();
+    openSignupModal();
 };
 
 // Chat functionality
@@ -197,120 +198,122 @@ onMounted(() => {
 
         <!-- Header Navigation -->
         <header class="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-white/10">
-            <div class="max-w-7xl mx-auto px-6">
-                <div class="flex h-20 items-center justify-between">
-                    <div class="flex items-center space-x-4">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6">
+                <div class="flex h-16 sm:h-20 items-center justify-between">
+                    <div class="flex items-center space-x-2 sm:space-x-4">
                         <div class="relative">
-                            <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 p-0.5">
+                            <div class="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-2xl bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 p-0.5">
                                 <div class="flex h-full w-full items-center justify-center rounded-2xl bg-black">
-                                    <Bot class="h-6 w-6 text-white" />
+                                    <Bot class="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                                 </div>
                             </div>
-                            <div class="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-green-400 animate-pulse"></div>
+                            <div class="absolute -top-1 -right-1 h-3 w-3 sm:h-4 sm:w-4 rounded-full bg-green-400 animate-pulse"></div>
                         </div>
                         <div>
-                            <span class="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">ChatMe</span>
-                            <div class="text-xs text-gray-500 font-mono">AI-Powered</div>
+                            <span class="text-lg sm:text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">ChatMe</span>
+                            <div class="text-xs text-gray-500 font-mono hidden sm:block">AI-Powered</div>
                         </div>
                     </div>
 
-                    <div class="flex items-center space-x-6">
-                <Link
-                    v-if="$page.props.auth.user"
+                    <div class="flex items-center space-x-2 sm:space-x-6">
+                        <Link
+                            v-if="$page.props.auth.user"
                             href="/dashboard"
-                            class="inline-flex items-center rounded-xl bg-white/10 px-6 py-3 text-sm font-medium text-white hover:bg-white/20 transition-all duration-300 border border-white/20 hover:border-white/40"
-                >
-                    Dashboard
-                </Link>
-                <template v-else>
-                    <button
-                        @click="openLoginModal"
-                        class="text-sm font-medium text-gray-400 hover:text-white transition-colors duration-300"
-                    >
-                        Sign in
-                    </button>
-                    <button
-                        @click="openSignupModal"
-                        class="inline-flex items-center rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 px-6 py-3 text-sm font-medium text-white hover:from-blue-600 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-blue-500/25"
-                    >
-                        Get Started
-                    </button>
-                </template>
+                            class="inline-flex items-center rounded-xl bg-white/10 px-3 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm font-medium text-white hover:bg-white/20 transition-all duration-300 border border-white/20 hover:border-white/40"
+                        >
+                            <span class="hidden sm:inline">Dashboard</span>
+                            <span class="sm:hidden">Dash</span>
+                        </Link>
+                        <template v-else>
+                            <button
+                                @click="openLoginModal"
+                                class="text-xs sm:text-sm font-medium text-gray-400 hover:text-white transition-colors duration-300 hidden sm:block"
+                            >
+                                Sign in
+                            </button>
+                            <button
+                                @click="openSignupModal"
+                                class="inline-flex items-center rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 px-3 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm font-medium text-white hover:from-blue-600 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-blue-500/25"
+                            >
+                                <span class="hidden sm:inline">Get Started</span>
+                                <span class="sm:hidden">Start</span>
+                            </button>
+                        </template>
                     </div>
                 </div>
             </div>
         </header>
 
         <!-- Hero Section -->
-        <div class="relative z-10 pt-32 pb-20">
-            <div class="max-w-7xl mx-auto px-6">
-                <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div class="relative z-10 pt-24 sm:pt-28 lg:pt-32 pb-16 sm:pb-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6">
+                <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
                     <!-- Left Column - Text Content -->
-                    <div class="space-y-8">
-                        <div class="inline-flex items-center rounded-3xl bg-white/5 backdrop-blur-sm border border-white/10 px-6 py-3 text-sm font-medium text-white shadow-2xl">
-                            <div class="flex items-center space-x-3">
+                    <div class="space-y-6 sm:space-y-8 text-center lg:text-left">
+                        <div class="inline-flex items-center rounded-3xl bg-white/5 backdrop-blur-sm border border-white/10 px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-medium text-white shadow-2xl">
+                            <div class="flex items-center space-x-2 sm:space-x-3">
                                 <div class="relative">
-                                    <div class="h-3 w-3 rounded-full bg-green-400 animate-pulse"></div>
-                                    <div class="absolute inset-0 h-3 w-3 rounded-full bg-green-400 animate-ping"></div>
+                                    <div class="h-2 w-2 sm:h-3 sm:w-3 rounded-full bg-green-400 animate-pulse"></div>
+                                    <div class="absolute inset-0 h-2 w-2 sm:h-3 sm:w-3 rounded-full bg-green-400 animate-ping"></div>
                                 </div>
-                                <span class="font-semibold">AI Document Intelligence</span>
+                                <span class="font-semibold text-xs sm:text-sm">AI Document Intelligence</span>
                             </div>
-                            <div class="ml-3 p-1.5 rounded-full bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-400/30">
-                                <Sparkles class="h-4 w-4 text-purple-300 animate-bounce" />
+                            <div class="ml-2 sm:ml-3 p-1 sm:p-1.5 rounded-full bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-400/30">
+                                <Sparkles class="h-3 w-3 sm:h-4 sm:w-4 text-purple-300 animate-bounce" />
                             </div>
                         </div>
 
-                        <div class="space-y-6">
-                            <h1 class="text-6xl md:text-7xl font-black text-white leading-tight">
+                        <div class="space-y-4 sm:space-y-6">
+                            <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black text-white leading-tight">
                                 <span class="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent animate-pulse">AI Document</span>
                                 <br>
                                 <span class="bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 bg-clip-text text-transparent">Intelligence</span>
                             </h1>
 
-                            <p class="text-xl text-gray-300 leading-relaxed max-w-2xl font-light">
+                            <p class="text-base sm:text-lg lg:text-xl text-gray-300 leading-relaxed max-w-2xl mx-auto lg:mx-0 font-light">
                                 Transform any PDF into an intelligent conversation partner. Ask questions, get insights, and unlock the hidden knowledge within your documents using cutting-edge AI technology.
                             </p>
                         </div>
 
                         <!-- Animated Dots -->
-                        <div class="flex space-x-2">
-                            <div class="w-3 h-3 bg-blue-400 rounded-full animate-bounce"></div>
-                            <div class="w-3 h-3 bg-purple-400 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
-                            <div class="w-3 h-3 bg-pink-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
-                            <div class="w-3 h-3 bg-emerald-400 rounded-full animate-bounce" style="animation-delay: 0.3s"></div>
+                        <div class="flex space-x-2 justify-center lg:justify-start">
+                            <div class="w-2 h-2 sm:w-3 sm:h-3 bg-blue-400 rounded-full animate-bounce"></div>
+                            <div class="w-2 h-2 sm:w-3 sm:h-3 bg-purple-400 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
+                            <div class="w-2 h-2 sm:w-3 sm:h-3 bg-pink-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+                            <div class="w-2 h-2 sm:w-3 sm:h-3 bg-emerald-400 rounded-full animate-bounce" style="animation-delay: 0.3s"></div>
                         </div>
 
                         <!-- Feature Pills -->
-                        <div class="flex flex-wrap gap-4">
-                            <div class="flex items-center space-x-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm">
-                                <Shield class="w-4 h-4 text-green-400" />
-                                <span class="text-sm text-white">Secure & Private</span>
+                        <div class="flex flex-wrap gap-2 sm:gap-4 justify-center lg:justify-start">
+                            <div class="flex items-center space-x-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm">
+                                <Shield class="w-3 h-3 sm:w-4 sm:h-4 text-green-400" />
+                                <span class="text-xs sm:text-sm text-white">Secure & Private</span>
                             </div>
-                            <div class="flex items-center space-x-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm">
-                                <Zap class="w-4 h-4 text-blue-400" />
-                                <span class="text-sm text-white">Lightning Fast</span>
+                            <div class="flex items-center space-x-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm">
+                                <Zap class="w-3 h-3 sm:w-4 sm:h-4 text-blue-400" />
+                                <span class="text-xs sm:text-sm text-white">Lightning Fast</span>
                             </div>
-                            <div class="flex items-center space-x-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm">
-                                <Brain class="w-4 h-4 text-purple-400" />
-                                <span class="text-sm text-white">AI Powered</span>
+                            <div class="flex items-center space-x-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm">
+                                <Brain class="w-3 h-3 sm:w-4 sm:h-4 text-purple-400" />
+                                <span class="text-xs sm:text-sm text-white">AI Powered</span>
                             </div>
                         </div>
 
 
 
                         <!-- Stats -->
-                        <div class="flex items-center space-x-8 pt-8">
+                        <div class="flex items-center justify-center lg:justify-start space-x-4 sm:space-x-8 pt-6 sm:pt-8">
                             <div class="text-center">
-                                <div class="text-2xl font-bold text-white">10K+</div>
-                                <div class="text-sm text-gray-400">Active Users</div>
+                                <div class="text-lg sm:text-2xl font-bold text-white">10K+</div>
+                                <div class="text-xs sm:text-sm text-gray-400">Active Users</div>
                             </div>
                             <div class="text-center">
-                                <div class="text-2xl font-bold text-white">1M+</div>
-                                <div class="text-sm text-gray-400">Documents Processed</div>
+                                <div class="text-lg sm:text-2xl font-bold text-white">1M+</div>
+                                <div class="text-xs sm:text-sm text-gray-400">Documents Processed</div>
                             </div>
                             <div class="text-center">
-                                <div class="text-2xl font-bold text-white">99.9%</div>
-                                <div class="text-sm text-gray-400">Uptime</div>
+                                <div class="text-lg sm:text-2xl font-bold text-white">99.9%</div>
+                                <div class="text-xs sm:text-sm text-gray-400">Uptime</div>
                             </div>
                         </div>
                     </div>
@@ -323,7 +326,7 @@ onMounted(() => {
 
                         <!-- File Upload Zone -->
                         <Label for="pdf-upload" class="cursor-pointer block">
-                            <div class="group relative rounded-3xl border-2 border-dashed border-white/20 bg-gradient-to-br from-white/10 via-white/5 to-white/10 p-16 text-center transition-all duration-700 hover:border-blue-500/50 hover:bg-white/15 backdrop-blur-2xl hover-lift shadow-2xl hover:shadow-blue-500/25 overflow-hidden">
+                            <div class="group relative rounded-2xl sm:rounded-3xl border-2 border-dashed border-white/20 bg-gradient-to-br from-white/10 via-white/5 to-white/10 p-8 sm:p-12 lg:p-16 text-center transition-all duration-700 hover:border-blue-500/50 hover:bg-white/15 backdrop-blur-2xl hover-lift shadow-2xl hover:shadow-blue-500/25 overflow-hidden">
 
                                 <!-- Animated Background Pattern -->
                                 <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(168,85,247,0.1)_0%,transparent_50%),radial-gradient(circle_at_70%_80%,rgba(59,130,246,0.1)_0%,transparent_50%)] rounded-3xl"></div>
@@ -337,13 +340,13 @@ onMounted(() => {
                                     <!-- Enhanced Upload Icon Container -->
                                     <div class="relative">
                                         <!-- Main Icon Circle -->
-                                        <div class="mx-auto w-32 h-32 rounded-full bg-gradient-to-br from-blue-500/30 via-purple-500/30 to-pink-500/30 border-2 border-white/20 flex items-center justify-center group-hover:scale-110 transition-all duration-700 animate-scale shadow-2xl">
+                                        <div class="mx-auto w-20 h-20 sm:w-24 sm:h-24 lg:w-32 lg:h-32 rounded-full bg-gradient-to-br from-blue-500/30 via-purple-500/30 to-pink-500/30 border-2 border-white/20 flex items-center justify-center group-hover:scale-110 transition-all duration-700 animate-scale shadow-2xl">
                                             <div class="relative">
-                                                <Upload class="h-16 w-16 text-white group-hover:text-blue-200 transition-all duration-500" />
+                                                <Upload class="h-10 w-10 sm:h-12 sm:w-12 lg:h-16 lg:w-16 text-white group-hover:text-blue-200 transition-all duration-500" />
                                                 <!-- Animated Rings -->
-                                                <div class="absolute inset-0 w-16 h-16 border-2 border-blue-400/40 rounded-full animate-ping"></div>
-                                                <div class="absolute inset-0 w-16 h-16 border-2 border-purple-400/40 rounded-full animate-ping" style="animation-delay: 0.5s"></div>
-                                                <div class="absolute inset-0 w-16 h-16 border-2 border-pink-400/40 rounded-full animate-ping" style="animation-delay: 1s"></div>
+                                                <div class="absolute inset-0 w-10 h-10 sm:w-12 sm:h-12 lg:w-16 lg:h-16 border-2 border-blue-400/40 rounded-full animate-ping"></div>
+                                                <div class="absolute inset-0 w-10 h-10 sm:w-12 sm:h-12 lg:w-16 lg:h-16 border-2 border-purple-400/40 rounded-full animate-ping" style="animation-delay: 0.5s"></div>
+                                                <div class="absolute inset-0 w-10 h-10 sm:w-12 sm:h-12 lg:w-16 lg:h-16 border-2 border-pink-400/40 rounded-full animate-ping" style="animation-delay: 1s"></div>
                                             </div>
                                         </div>
 
@@ -355,18 +358,18 @@ onMounted(() => {
                                     </div>
 
                                                                         <!-- Enhanced Text Content -->
-                                    <div class="space-y-4">
-                                        <h3 class="text-3xl font-black text-black group-hover:text-gray-800 transition-colors duration-500">
+                                    <div class="space-y-3 sm:space-y-4">
+                                        <h3 class="text-xl sm:text-2xl lg:text-3xl font-black text-black group-hover:text-gray-800 transition-colors duration-500">
                                             Upload Your Document
                                         </h3>
-                                        <p class="text-gray-700 text-base max-w-sm mx-auto leading-relaxed font-light">
+                                        <p class="text-gray-700 text-sm sm:text-base max-w-sm mx-auto leading-relaxed font-light">
                                             Drag and drop your PDF file here or click anywhere to browse and start your AI journey
                                         </p>
 
                                         <!-- Interactive Hint -->
-                                        <div class="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-white/80 border border-gray-200 backdrop-blur-sm">
-                                            <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                                            <span class="text-sm text-black font-medium">Click anywhere to upload</span>
+                                        <div class="inline-flex items-center space-x-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white/80 border border-gray-200 backdrop-blur-sm">
+                                            <div class="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-500 rounded-full animate-pulse"></div>
+                                            <span class="text-xs sm:text-sm text-black font-medium">Click anywhere to upload</span>
                                         </div>
                                     </div>
                                 </div>
@@ -959,14 +962,14 @@ onMounted(() => {
         </section>
 
         <!-- Pricing Plans Section -->
-        <section class="relative z-10 mt-20">
-            <div class="max-w-7xl mx-auto px-6 py-16">
-                <div class="text-center mb-16">
-                    <h2 class="text-4xl font-bold text-white mb-4 gradient-text">Choose Your Plan</h2>
-                    <p class="text-xl text-gray-400">Start free and scale as you grow</p>
+        <section class="relative z-10 mt-16 sm:mt-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+                <div class="text-center mb-12 sm:mb-16">
+                    <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-4 gradient-text">Choose Your Plan</h2>
+                    <p class="text-base sm:text-lg lg:text-xl text-gray-400">Start free and scale as you grow</p>
                 </div>
 
-                <div class="grid lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto">
                     <!-- Free Plan -->
                     <div class="relative p-8 rounded-3xl bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all duration-300 transform hover:scale-105">
                         <div class="text-center mb-8">
@@ -997,8 +1000,8 @@ onMounted(() => {
                         </li>
                     </ul>
 
-                        <Button class="w-full bg-white/10 hover:bg-white/20 text-white border border-white/20 py-3 rounded-xl transition-all duration-300">
-                            Get Started Free
+                        <Button @click="startFreeChat" class="w-full bg-white/10 hover:bg-white/20 text-white border border-white/20 py-3 rounded-xl transition-all duration-300">
+                            Choose Plan
                         </Button>
                     </div>
 
@@ -1047,8 +1050,8 @@ onMounted(() => {
                         </li>
                     </ul>
 
-                        <Button class="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white py-3 rounded-xl transition-all duration-300 transform hover:scale-105">
-                            Start Pro Trial
+                        <Button @click="startFreeChat" class="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white py-3 rounded-xl transition-all duration-300 transform hover:scale-105">
+                            Choose Plan
                         </Button>
                 </div>
 
@@ -1090,8 +1093,8 @@ onMounted(() => {
                             </li>
                         </ul>
 
-                        <Button class="w-full bg-white/10 hover:bg-white/20 text-white border border-white/20 py-3 rounded-xl transition-all duration-300">
-                            Contact Sales
+                        <Button @click="startFreeChat" class="w-full bg-white/10 hover:bg-white/20 text-white border border-white/20 py-3 rounded-xl transition-all duration-300">
+                            Choose Plan
                         </Button>
                     </div>
                 </div>
@@ -1145,28 +1148,28 @@ onMounted(() => {
         </section>
 
                 <!-- Plans Selection Interface -->
-        <div v-if="showPlans" class="fixed inset-0 z-50 flex items-end justify-center p-4 sm:items-center">
+        <div v-if="showPlans" class="fixed inset-0 z-50 flex items-end justify-center p-2 sm:p-4 sm:items-center">
             <div class="fixed inset-0 bg-black/80 backdrop-blur-sm" @click="closePlans"></div>
-            <Card class="relative w-full max-w-5xl bg-black/90 border border-white/20 backdrop-blur-xl">
-                <CardHeader class="border-b border-white/10 bg-white/5">
+            <Card class="relative w-full max-w-4xl lg:max-w-5xl bg-black/90 border border-white/20 backdrop-blur-xl">
+                <CardHeader class="border-b border-white/10 bg-white/5 p-4 sm:p-6">
                     <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-4">
-                            <div class="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">
-                                <Sparkles class="h-6 w-6 text-white" />
+                        <div class="flex items-center space-x-2 sm:space-x-4">
+                            <div class="flex h-8 w-8 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">
+                                <Sparkles class="h-4 w-4 sm:h-6 sm:w-6 text-white" />
                             </div>
                             <div>
-                                <CardTitle class="text-2xl text-white">Choose Your Plan</CardTitle>
-                                <CardDescription class="text-gray-400">Select the perfect plan to start your AI journey</CardDescription>
+                                <CardTitle class="text-lg sm:text-xl lg:text-2xl text-white">Choose Your Plan</CardTitle>
+                                <CardDescription class="text-xs sm:text-sm text-gray-400">Select the perfect plan to start your AI journey</CardDescription>
                             </div>
                         </div>
                         <Button variant="ghost" size="sm" @click="closePlans" class="text-gray-400 hover:text-white hover:bg-white/10">
-                            <X class="h-6 w-6" />
+                            <X class="h-4 w-4 sm:h-6 sm:w-6" />
                         </Button>
                     </div>
                 </CardHeader>
 
-                <CardContent class="p-8">
-                    <div class="grid md:grid-cols-3 gap-8">
+                <CardContent class="p-4 sm:p-6 lg:p-8">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
                         <!-- Free Plan -->
                         <div class="group relative p-8 rounded-3xl bg-gradient-to-br from-white/10 via-white/5 to-white/10 backdrop-blur-sm border border-white/20 hover:border-blue-500/50 transition-all duration-500 hover:scale-105 hover-lift">
                             <div class="absolute -inset-2 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -1200,7 +1203,7 @@ onMounted(() => {
 
                                 <!-- CTA Button -->
                                 <Button @click="startFreeChat" class="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 px-6 py-3 text-white font-semibold rounded-2xl shadow-lg hover:shadow-blue-500/25 transition-all duration-300 transform hover:scale-105">
-                                    Get Started Free
+                                    Choose Plan
                                 </Button>
                             </div>
                         </div>
@@ -1248,8 +1251,8 @@ onMounted(() => {
                                 </div>
 
                                 <!-- CTA Button -->
-                                <Button class="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 px-6 py-3 text-white font-semibold rounded-2xl shadow-lg hover:shadow-purple-500/25 transition-all duration-300 transform hover:scale-105">
-                                    Choose Pro
+                                <Button @click="startFreeChat" class="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 px-6 py-3 text-white font-semibold rounded-2xl shadow-lg hover:shadow-purple-500/25 transition-all duration-300 transform hover:scale-105">
+                                    Choose Plan
                                 </Button>
                             </div>
                         </div>
@@ -1290,8 +1293,8 @@ onMounted(() => {
                                 </div>
 
                                 <!-- CTA Button -->
-                                <Button class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 px-6 py-3 text-white font-semibold rounded-2xl shadow-lg hover:shadow-emerald-500/25 transition-all duration-300 transform hover:scale-105">
-                                    Choose Advanced
+                                <Button @click="startFreeChat" class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 px-6 py-3 text-white font-semibold rounded-2xl shadow-lg hover:shadow-emerald-500/25 transition-all duration-300 transform hover:scale-105">
+                                    Choose Plan
                                 </Button>
                             </div>
                         </div>
@@ -1407,89 +1410,89 @@ onMounted(() => {
             </div>
         </footer>
 
-        <!-- Auth Modal -->
+                <!-- Auth Modal -->
         <div v-if="showLoginModal || showSignupModal" class="fixed inset-0 z-[100] flex items-center justify-center p-4">
             <!-- Backdrop -->
             <div class="absolute inset-0 bg-black/80 backdrop-blur-xl" @click="closeAuthModal"></div>
 
             <!-- Modal Content -->
-            <div class="relative w-full max-w-md transform overflow-hidden rounded-3xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-8 shadow-2xl border border-white/10 transition-all duration-500">
+            <div class="relative w-full max-w-sm sm:max-w-md transform overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-4 sm:p-6 lg:p-8 shadow-2xl border border-white/10 transition-all duration-500">
                 <!-- Floating Elements -->
                 <div class="absolute top-4 right-4 w-16 h-16 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full blur-2xl"></div>
                 <div class="absolute bottom-4 left-4 w-12 h-12 bg-gradient-to-br from-pink-500/20 to-rose-500/20 rounded-full blur-xl"></div>
 
                 <!-- Header -->
-                <div class="text-center mb-8">
-                    <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 p-0.5 mx-auto mb-4">
+                <div class="text-center mb-6 sm:mb-8">
+                    <div class="flex h-12 w-12 sm:h-16 sm:w-16 items-center justify-center rounded-2xl bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 p-0.5 mx-auto mb-3 sm:mb-4">
                         <div class="flex h-full w-full items-center justify-center rounded-2xl bg-gray-900">
-                            <Bot class="h-8 w-8 text-white" />
+                            <Bot class="h-6 w-6 sm:h-8 sm:w-8 text-white" />
                         </div>
                     </div>
-                    <h2 class="text-2xl font-bold text-white mb-2">
+                    <h2 class="text-xl sm:text-2xl font-bold text-white mb-2">
                         {{ isLoginMode ? 'Welcome Back' : 'Create Account' }}
                     </h2>
-                    <p class="text-gray-400">
+                    <p class="text-sm sm:text-base text-gray-400">
                         {{ isLoginMode ? 'Sign in to your account' : 'Join our AI platform today' }}
                     </p>
                 </div>
 
                 <!-- Form -->
-                <form @submit.prevent="isLoginMode ? handleLogin : handleSignup" class="space-y-6">
+                <form @submit.prevent="isLoginMode ? handleLogin : handleSignup" class="space-y-4 sm:space-y-6">
                     <!-- Name Field (Signup Only) -->
                     <div v-if="!isLoginMode" class="space-y-2">
-                        <label class="block text-sm font-medium text-gray-300">Full Name</label>
+                        <label class="block text-xs sm:text-sm font-medium text-gray-300">Full Name</label>
                         <input
                             v-model="signupForm.name"
                             type="text"
                             required
-                            class="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all duration-300"
+                            class="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-gray-800 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all duration-300 text-sm sm:text-base"
                             placeholder="Enter your full name"
                         />
                     </div>
 
                     <!-- Email Field -->
                     <div class="space-y-2">
-                        <label class="block text-sm font-medium text-gray-300">Email Address</label>
+                        <label class="block text-xs sm:text-sm font-medium text-gray-300">Email Address</label>
                         <input
                             v-model="emailValue"
                             type="email"
                             required
-                            class="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all duration-300"
+                            class="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-gray-800 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all duration-300 text-sm sm:text-base"
                             placeholder="Enter your email"
                         />
                     </div>
 
                     <!-- Password Field -->
                     <div class="space-y-2">
-                        <label class="block text-sm font-medium text-gray-300">Password</label>
+                        <label class="block text-xs sm:text-sm font-medium text-gray-300">Password</label>
                         <input
                             v-model="passwordValue"
                             type="password"
                             required
-                            class="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all duration-300"
+                            class="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-gray-800 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all duration-300 text-sm sm:text-base"
                             placeholder="Enter your password"
                         />
                     </div>
 
                     <!-- Confirm Password Field (Signup Only) -->
                     <div v-if="!isLoginMode" class="space-y-2">
-                        <label class="block text-sm font-medium text-gray-300">Confirm Password</label>
+                        <label class="block text-xs sm:text-sm font-medium text-gray-300">Confirm Password</label>
                         <input
                             v-model="signupForm.confirmPassword"
                             type="password"
                             required
-                            class="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all duration-300"
+                            class="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-gray-800 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all duration-300 text-sm sm:text-base"
                             placeholder="Confirm your password"
                         />
                     </div>
 
                     <!-- Divider -->
-                    <div class="relative my-6">
+                    <div class="relative my-4 sm:my-6">
                         <div class="absolute inset-0 flex items-center">
                             <div class="w-full border-t border-gray-600"></div>
                         </div>
-                        <div class="relative flex justify-center text-sm">
-                            <span class="px-4 bg-gray-900 text-gray-400">or continue with</span>
+                        <div class="relative flex justify-center text-xs sm:text-sm">
+                            <span class="px-3 sm:px-4 bg-gray-900 text-gray-400">or continue with</span>
                         </div>
                     </div>
 

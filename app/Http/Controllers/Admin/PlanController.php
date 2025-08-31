@@ -37,7 +37,7 @@ class PlanController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'price' => 'required|numeric|min:0',
+            'price' => 'required|integer|min:0',
             'duration' => 'required|string|max:255',
             'features' => 'nullable|array',
             'is_active' => 'boolean',
@@ -53,7 +53,11 @@ class PlanController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $plan = Plan::findOrFail($id);
+
+        return Inertia::render('Admin/Plans/Show', [
+            'plan' => $plan
+        ]);
     }
 
     /**
@@ -61,7 +65,11 @@ class PlanController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $plan = Plan::findOrFail($id);
+
+        return Inertia::render('Admin/Plans/Edit', [
+            'plan' => $plan
+        ]);
     }
 
     /**
@@ -69,7 +77,20 @@ class PlanController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $plan = Plan::findOrFail($id);
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'price' => 'required|integer|min:0',
+            'duration' => 'required|string|max:255',
+            'features' => 'nullable|array',
+            'is_active' => 'boolean',
+        ]);
+
+        $plan->update($validated);
+
+        return redirect()->route('admin.plans.index')->with('success', 'Plan updated successfully!');
     }
 
     /**
@@ -77,6 +98,9 @@ class PlanController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $plan = Plan::findOrFail($id);
+        $plan->delete();
+
+        return redirect()->route('admin.plans.index')->with('success', 'Plan deleted successfully!');
     }
 }

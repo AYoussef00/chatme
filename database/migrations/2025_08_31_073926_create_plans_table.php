@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('description')->nullable();
-            $table->decimal('price', 10, 2);
+            $table->integer('price');
             $table->string('duration'); // monthly, yearly, etc.
             $table->json('features')->nullable(); // Array of features
             $table->boolean('is_active')->default(true);
