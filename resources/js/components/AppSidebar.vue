@@ -6,7 +6,7 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, Sid
 import { dashboard } from '@/routes';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/vue3';
-import { BookOpen, Folder, LayoutGrid } from 'lucide-vue-next';
+import { BookOpen, Folder, LayoutGrid, Users, CreditCard, Receipt, FileText, Settings, Globe } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
 
 const mainNavItems: NavItem[] = [
@@ -14,6 +14,36 @@ const mainNavItems: NavItem[] = [
         title: 'Dashboard',
         href: dashboard(),
         icon: LayoutGrid,
+    },
+    {
+        title: 'Users',
+        href: '/admin/plans', // Temporary, will change later
+        icon: Users,
+    },
+    {
+        title: 'Plans',
+        href: '/admin/plans',
+        icon: CreditCard,
+    },
+    {
+        title: 'Subscriptions',
+        href: '/admin/subscriptions',
+        icon: Receipt,
+    },
+    {
+        title: 'Invoices',
+        href: '/admin/invoices',
+        icon: FileText,
+    },
+    {
+        title: 'Blogs',
+        href: '/admin/blogs',
+        icon: BookOpen,
+    },
+    {
+        title: 'Website Settings',
+        href: '/admin/settings',
+        icon: Settings,
     },
 ];
 
