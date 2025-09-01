@@ -4,7 +4,10 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    return Inertia::render('Welcome');
+    $plans = \App\Models\Plan::where('is_active', true)->get();
+    return Inertia::render('Welcome', [
+        'plans' => $plans
+    ]);
 })->name('home');
 
 Route::get('dashboard', function () {
@@ -12,11 +15,17 @@ Route::get('dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('chat', function () {
-    return Inertia::render('Chat');
+    $plans = \App\Models\Plan::where('is_active', true)->get();
+    return Inertia::render('Chat', [
+        'plans' => $plans
+    ]);
 })->name('chat');
 
 Route::get('help-center', function () {
-    return Inertia::render('HelpCenter');
+    $plans = \App\Models\Plan::where('is_active', true)->get();
+    return Inertia::render('HelpCenter', [
+        'plans' => $plans
+    ]);
 })->name('help-center');
 
 

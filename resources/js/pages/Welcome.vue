@@ -13,12 +13,30 @@ import {
 
 // Types
 
+interface Plan {
+    id: number;
+    name: string;
+    description: string | null;
+    price: number;
+    duration: string;
+    features: string[] | null;
+    is_active: boolean;
+}
 
 interface UploadedFile {
     name: string;
     type: string;
     size: number;
 }
+
+// Props
+interface Props {
+    plans?: Plan[];
+}
+
+const props = withDefaults(defineProps<Props>(), {
+    plans: () => []
+});
 
 // Reactive data
 const isUploading = ref(false);
@@ -969,134 +987,41 @@ onMounted(() => {
                     <p class="text-base sm:text-lg lg:text-xl text-gray-400">Start free and scale as you grow</p>
                 </div>
 
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto">
-                    <!-- Free Plan -->
-                    <div class="relative p-8 rounded-3xl bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all duration-300 transform hover:scale-105">
-                        <div class="text-center mb-8">
-                            <div class="w-16 h-16 bg-gradient-to-r from-gray-500 to-gray-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                                <Users class="h-8 w-8 text-white" />
+                <div class="grid md:grid-cols-2 xl:grid-cols-4 gap-10 sm:gap-12 lg:gap-16 max-w-8xl mx-auto">
+                    <template v-for="(plan, index) in props.plans" :key="plan.id">
+                        <div class="relative p-10 sm:p-12 rounded-3xl bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all duration-300 transform hover:scale-105 min-w-0 flex flex-col">
+                            <!-- Popular Badge for second plan -->
+                            <div v-if="index === 1" class="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                                <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 rounded-full text-sm font-semibold">
+                                    Most Popular
+                                </div>
                             </div>
-                            <h3 class="text-2xl font-bold text-white mb-2">Free</h3>
-                            <div class="text-4xl font-bold text-white mb-2">$0</div>
-                            <p class="text-gray-400">Perfect for getting started</p>
-                        </div>
 
-                        <ul class="space-y-4 mb-8">
-                            <li class="flex items-center text-gray-300">
-                                <CheckCircle class="h-5 w-5 text-green-400 mr-3 flex-shrink-0" />
-                                <span>5 documents per month</span>
-                        </li>
-                            <li class="flex items-center text-gray-300">
-                                <CheckCircle class="h-5 w-5 text-green-400 mr-3 flex-shrink-0" />
-                                <span>Basic AI chat support</span>
-                            </li>
-                            <li class="flex items-center text-gray-300">
-                                <CheckCircle class="h-5 w-5 text-green-400 mr-3 flex-shrink-0" />
-                                <span>Standard response time</span>
-                            </li>
-                            <li class="flex items-center text-gray-300">
-                                <CheckCircle class="h-5 w-5 text-green-400 mr-3 flex-shrink-0" />
-                                <span>Community support</span>
-                        </li>
-                    </ul>
-
-                        <Button @click="startFreeChat" class="w-full bg-white/10 hover:bg-white/20 text-white border border-white/20 py-3 rounded-xl transition-all duration-300">
-                            Choose Plan
-                        </Button>
-                    </div>
-
-                    <!-- Pro Plan -->
-                    <div class="relative p-8 rounded-3xl bg-gradient-to-br from-blue-600/20 to-purple-600/20 border border-blue-500/30 backdrop-blur-sm hover:bg-blue-600/30 transition-all duration-300 transform hover:scale-105">
-                        <!-- Popular Badge -->
-                        <div class="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                            <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 rounded-full text-sm font-semibold">
-                                Most Popular
+                            <div class="text-center mb-8">
+                                <div class="w-16 h-16 bg-gradient-to-r from-gray-500 to-gray-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                    <Users v-if="index === 0" class="h-8 w-8 text-white" />
+                                    <Star v-else-if="index === 1" class="h-8 w-8 text-white" />
+                                    <Crown v-else-if="index === 2" class="h-8 w-8 text-white" />
+                                    <Zap v-else class="h-8 w-8 text-white" />
+                                </div>
+                                <h3 class="text-2xl font-bold text-white mb-2">{{ plan.name }}</h3>
+                                <div v-if="plan.name !== 'Enterprice'" class="text-4xl font-bold text-white mb-2">${{ plan.price }}</div>
+                                <div v-else class="text-4xl font-bold text-white mb-2">Let's Talk</div>
+                                <p class="text-gray-400">{{ plan.description || 'Perfect for getting started' }}</p>
                             </div>
+
+                            <ul class="space-y-4 mb-8 flex-1">
+                                <li v-for="feature in (plan.features || [])" :key="feature" class="flex items-center text-gray-300">
+                                    <CheckCircle class="h-5 w-5 text-green-400 mr-3 flex-shrink-0" />
+                                    <span>{{ feature }}</span>
+                                </li>
+                            </ul>
+
+                            <Button @click="startFreeChat" class="w-full bg-white/10 hover:bg-white/20 text-white border border-white/20 py-3 rounded-xl transition-all duration-300 mt-auto">
+                                Choose Plan
+                            </Button>
                         </div>
-
-                        <div class="text-center mb-8">
-                            <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                                <Star class="h-8 w-8 text-white" />
-                            </div>
-                            <h3 class="text-2xl font-bold text-white mb-2">Pro</h3>
-                            <div class="text-4xl font-bold text-white mb-2">$29</div>
-                            <p class="text-gray-400">For professionals and teams</p>
-                        </div>
-
-                        <ul class="space-y-4 mb-8">
-                            <li class="flex items-center text-gray-300">
-                                <CheckCircle class="h-5 w-5 text-green-400 mr-3 flex-shrink-0" />
-                                <span>100 documents per month</span>
-                            </li>
-                            <li class="flex items-center text-gray-300">
-                                <CheckCircle class="h-5 w-5 text-green-400 mr-3 flex-shrink-0" />
-                                <span>Advanced AI models</span>
-                            </li>
-                            <li class="flex items-center text-gray-300">
-                                <CheckCircle class="h-5 w-5 text-green-400 mr-3 flex-shrink-0" />
-                                <span>Priority response time</span>
-                            </li>
-                            <li class="flex items-center text-gray-300">
-                                <CheckCircle class="h-5 w-5 text-green-400 mr-3 flex-shrink-0" />
-                                <span>Email support</span>
-                            </li>
-                            <li class="flex items-center text-gray-300">
-                                <CheckCircle class="h-5 w-5 text-green-400 mr-3 flex-shrink-0" />
-                                <span>Custom integrations</span>
-                            </li>
-                            <li class="flex items-center text-gray-300">
-                                <CheckCircle class="h-5 w-5 text-green-400 mr-3 flex-shrink-0" />
-                                <span>Analytics dashboard</span>
-                        </li>
-                    </ul>
-
-                        <Button @click="startFreeChat" class="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white py-3 rounded-xl transition-all duration-300 transform hover:scale-105">
-                            Choose Plan
-                        </Button>
-                </div>
-
-                    <!-- Enterprise Plan -->
-                    <div class="relative p-8 rounded-3xl bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all duration-300 transform hover:scale-105">
-                        <div class="text-center mb-8">
-                            <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                                <Crown class="h-8 w-8 text-white" />
-                            </div>
-                            <h3 class="text-2xl font-bold text-white mb-2">Enterprise</h3>
-                            <div class="text-4xl font-bold text-white mb-2">Custom</div>
-                            <p class="text-gray-400">For large organizations</p>
-                        </div>
-
-                        <ul class="space-y-4 mb-8">
-                            <li class="flex items-center text-gray-300">
-                                <CheckCircle class="h-5 w-5 text-green-400 mr-3 flex-shrink-0" />
-                                <span>Unlimited documents</span>
-                            </li>
-                            <li class="flex items-center text-gray-300">
-                                <CheckCircle class="h-5 w-5 text-green-400 mr-3 flex-shrink-0" />
-                                <span>Custom AI training</span>
-                            </li>
-                            <li class="flex items-center text-gray-300">
-                                <CheckCircle class="h-5 w-5 text-green-400 mr-3 flex-shrink-0" />
-                                <span>Instant response time</span>
-                            </li>
-                            <li class="flex items-center text-gray-300">
-                                <CheckCircle class="h-5 w-5 text-green-400 mr-3 flex-shrink-0" />
-                                <span>24/7 phone support</span>
-                            </li>
-                            <li class="flex items-center text-gray-300">
-                                <CheckCircle class="h-5 w-5 text-green-400 mr-3 flex-shrink-0" />
-                                <span>White-label solution</span>
-                            </li>
-                            <li class="flex items-center text-gray-300">
-                                <CheckCircle class="h-5 w-5 text-green-400 mr-3 flex-shrink-0" />
-                                <span>Dedicated account manager</span>
-                            </li>
-                        </ul>
-
-                        <Button @click="startFreeChat" class="w-full bg-white/10 hover:bg-white/20 text-white border border-white/20 py-3 rounded-xl transition-all duration-300">
-                            Choose Plan
-                        </Button>
-                    </div>
+                    </template>
                 </div>
 
                 <!-- Additional Info -->
@@ -1150,7 +1075,7 @@ onMounted(() => {
                 <!-- Plans Selection Interface -->
         <div v-if="showPlans" class="fixed inset-0 z-50 flex items-end justify-center p-2 sm:p-4 sm:items-center">
             <div class="fixed inset-0 bg-black/80 backdrop-blur-sm" @click="closePlans"></div>
-            <Card class="relative w-full max-w-4xl lg:max-w-5xl bg-black/90 border border-white/20 backdrop-blur-xl">
+            <Card class="relative w-full max-w-7xl lg:max-w-8xl bg-black/90 border border-white/20 backdrop-blur-xl">
                 <CardHeader class="border-b border-white/10 bg-white/5 p-4 sm:p-6">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-2 sm:space-x-4">
@@ -1169,135 +1094,48 @@ onMounted(() => {
                 </CardHeader>
 
                 <CardContent class="p-4 sm:p-6 lg:p-8">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
-                        <!-- Free Plan -->
-                        <div class="group relative p-8 rounded-3xl bg-gradient-to-br from-white/10 via-white/5 to-white/10 backdrop-blur-sm border border-white/20 hover:border-blue-500/50 transition-all duration-500 hover:scale-105 hover-lift">
-                            <div class="absolute -inset-2 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-8 sm:gap-10 lg:gap-12">
+                        <template v-for="(plan, index) in props.plans" :key="plan.id">
+                            <div class="group relative p-10 sm:p-12 rounded-3xl bg-gradient-to-br from-white/10 via-white/5 to-white/10 backdrop-blur-sm border border-white/20 hover:border-blue-500/50 transition-all duration-500 hover:scale-105 hover-lift min-w-0 flex flex-col">
+                                <div class="absolute -inset-2 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
-                            <div class="relative space-y-6">
-                                <!-- Plan Header -->
-                                <div class="text-center">
-                                    <div class="mx-auto w-16 h-16 rounded-full bg-gradient-to-br from-blue-500/30 to-purple-500/30 border border-blue-400/20 flex items-center justify-center mb-4">
-                                        <Zap class="h-8 w-8 text-blue-400" />
+                                <div class="relative space-y-6">
+                                    <!-- Popular Badge for second plan -->
+                                    <div v-if="index === 1" class="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                                        <div class="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full text-white text-sm font-semibold shadow-lg">
+                                            Most Popular
+                                        </div>
                                     </div>
-                                    <h3 class="text-2xl font-bold text-white mb-2">Free Plan</h3>
-                                    <div class="text-4xl font-black text-white mb-2">$0</div>
-                                    <p class="text-gray-400 text-sm">Perfect for getting started</p>
+
+                                    <!-- Plan Header -->
+                                    <div class="text-center">
+                                        <div class="mx-auto w-16 h-16 rounded-full bg-gradient-to-br from-blue-500/30 to-purple-500/30 border border-blue-400/20 flex items-center justify-center mb-4">
+                                            <Zap v-if="index === 0" class="h-8 w-8 text-blue-400" />
+                                            <Star v-else-if="index === 1" class="h-8 w-8 text-purple-400" />
+                                            <Crown v-else-if="index === 2" class="h-8 w-8 text-emerald-400" />
+                                            <Users v-else class="h-8 w-8 text-pink-400" />
+                                        </div>
+                                        <h3 class="text-2xl font-bold text-white mb-2">{{ plan.name }}</h3>
+                                        <div v-if="plan.name !== 'Enterprice'" class="text-4xl font-black text-white mb-2">${{ plan.price }}</div>
+                                        <div v-else class="text-4xl font-black text-white mb-2">Let's Talk</div>
+                                        <p class="text-gray-400 text-sm">{{ plan.description || 'Perfect for getting started' }}</p>
+                                    </div>
+
+                                    <!-- Features -->
+                                    <div class="space-y-3 flex-1">
+                                        <div v-for="feature in (plan.features || [])" :key="feature" class="flex items-center space-x-3">
+                                            <CheckCircle class="h-5 w-5 text-green-400" />
+                                            <span class="text-white text-sm">{{ feature }}</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- CTA Button -->
+                                    <Button @click="startFreeChat" class="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 px-6 py-3 text-white font-semibold rounded-2xl shadow-lg hover:shadow-blue-500/25 transition-all duration-300 transform hover:scale-105 mt-auto">
+                                        Choose Plan
+                                    </Button>
                                 </div>
-
-                                <!-- Features -->
-                                <div class="space-y-3">
-                                    <div class="flex items-center space-x-3">
-                                        <CheckCircle class="h-5 w-5 text-green-400" />
-                                        <span class="text-white text-sm">5 PDF uploads per month</span>
-                                    </div>
-                                    <div class="flex items-center space-x-3">
-                                        <CheckCircle class="h-5 w-5 text-green-400" />
-                                        <span class="text-white text-sm">Basic AI responses</span>
-                                    </div>
-                                    <div class="flex items-center space-x-3">
-                                        <CheckCircle class="h-5 w-5 text-green-400" />
-                                        <span class="text-white text-sm">Standard support</span>
-                                    </div>
-                                </div>
-
-                                <!-- CTA Button -->
-                                <Button @click="startFreeChat" class="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 px-6 py-3 text-white font-semibold rounded-2xl shadow-lg hover:shadow-blue-500/25 transition-all duration-300 transform hover:scale-105">
-                                    Choose Plan
-                                </Button>
                             </div>
-                        </div>
-
-                        <!-- Pro Plan -->
-                        <div class="group relative p-8 rounded-3xl bg-gradient-to-br from-white/15 via-white/10 to-white/15 backdrop-blur-sm border-2 border-purple-500/50 hover:border-purple-400 transition-all duration-500 hover:scale-105 hover-lift">
-                            <div class="absolute -inset-2 bg-gradient-to-r from-purple-500/30 to-pink-500/30 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
-                            <div class="relative space-y-6">
-                                <!-- Popular Badge -->
-                                <div class="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                                    <div class="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full text-white text-sm font-semibold shadow-lg">
-                                        Most Popular
-                                    </div>
-                                </div>
-
-                                <!-- Plan Header -->
-                                <div class="text-center">
-                                    <div class="mx-auto w-16 h-16 rounded-full bg-gradient-to-br from-purple-500/30 to-pink-500/30 border border-purple-400/20 flex items-center justify-center mb-4">
-                                        <Star class="h-8 w-8 text-purple-400" />
-                                    </div>
-                                    <h3 class="text-2xl font-bold text-white mb-2">Pro Plan</h3>
-                                    <div class="text-4xl font-black text-white mb-2">$29</div>
-                                    <p class="text-gray-400 text-sm">For power users</p>
-                                </div>
-
-                                <!-- Features -->
-                                <div class="space-y-3">
-                                    <div class="flex items-center space-x-3">
-                                        <CheckCircle class="h-5 w-5 text-green-400" />
-                                        <span class="text-white text-sm">Unlimited PDF uploads</span>
-                                    </div>
-                                    <div class="flex items-center space-x-3">
-                                        <CheckCircle class="h-5 w-5 text-green-400" />
-                                        <span class="text-white text-sm">Advanced AI responses</span>
-                                    </div>
-                                    <div class="flex items-center space-x-3">
-                                        <CheckCircle class="h-5 w-5 text-green-400" />
-                                        <span class="text-white text-sm">Priority support</span>
-                                    </div>
-                                    <div class="flex items-center space-x-3">
-                                        <CheckCircle class="h-5 w-5 text-green-400" />
-                                        <span class="text-white text-sm">Export conversations</span>
-                                    </div>
-                                </div>
-
-                                <!-- CTA Button -->
-                                <Button @click="startFreeChat" class="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 px-6 py-3 text-white font-semibold rounded-2xl shadow-lg hover:shadow-purple-500/25 transition-all duration-300 transform hover:scale-105">
-                                    Choose Plan
-                                </Button>
-                            </div>
-                        </div>
-
-                        <!-- Advanced Plan -->
-                        <div class="group relative p-8 rounded-3xl bg-gradient-to-br from-white/10 via-white/5 to-white/10 backdrop-blur-sm border border-white/20 hover:border-emerald-500/50 transition-all duration-500 hover:scale-105 hover-lift">
-                            <div class="absolute -inset-2 bg-gradient-to-r from-emerald-500/20 to-teal-500/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
-                            <div class="relative space-y-6">
-                                <!-- Plan Header -->
-                                <div class="text-center">
-                                    <div class="mx-auto w-16 h-16 rounded-full bg-gradient-to-br from-emerald-500/30 to-teal-500/30 border border-emerald-400/20 flex items-center justify-center mb-4">
-                                        <Crown class="h-8 w-8 text-emerald-400" />
-                                    </div>
-                                    <h3 class="text-2xl font-bold text-white mb-2">Advanced Plan</h3>
-                                    <div class="text-4xl font-black text-white mb-2">$99</div>
-                                    <p class="text-gray-400 text-sm">Enterprise solution</p>
-                                </div>
-
-                                <!-- Features -->
-                                <div class="space-y-3">
-                                    <div class="flex items-center space-x-3">
-                                        <CheckCircle class="h-5 w-5 text-green-400" />
-                                        <span class="text-white text-sm">Everything in Pro</span>
-                                    </div>
-                                    <div class="flex items-center space-x-3">
-                                        <CheckCircle class="h-5 w-5 text-green-400" />
-                                        <span class="text-white text-sm">Custom AI models</span>
-                                    </div>
-                                    <div class="flex items-center space-x-3">
-                                        <CheckCircle class="h-5 w-5 text-green-400" />
-                                        <span class="text-white text-sm">API access</span>
-                                    </div>
-                                    <div class="flex items-center space-x-3">
-                                        <CheckCircle class="h-5 w-5 text-green-400" />
-                                        <span class="text-white text-sm">Dedicated support</span>
-                                    </div>
-                                </div>
-
-                                <!-- CTA Button -->
-                                <Button @click="startFreeChat" class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 px-6 py-3 text-white font-semibold rounded-2xl shadow-lg hover:shadow-emerald-500/25 transition-all duration-300 transform hover:scale-105">
-                                    Choose Plan
-                                </Button>
-                            </div>
-                        </div>
+                        </template>
                     </div>
                 </CardContent>
             </Card>
@@ -1732,5 +1570,27 @@ onMounted(() => {
 
 .overflow-y-auto::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 255, 255, 0.5);
+}
+
+/* Plan cards responsive improvements */
+@media (max-width: 1280px) {
+    .grid-cols-4 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .grid-cols-4 {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Custom max-width for larger screens */
+.max-w-8xl {
+    max-width: 90rem; /* 1440px */
+}
+
+.max-w-7xl {
+    max-width: 80rem; /* 1280px */
 }
 </style>

@@ -9,6 +9,24 @@ import {
     Phone, Mail, Clock, Star, ArrowLeft
 } from 'lucide-vue-next';
 
+interface Plan {
+    id: number;
+    name: string;
+    description: string | null;
+    price: number;
+    duration: string;
+    features: string[] | null;
+    is_active: boolean;
+}
+
+interface Props {
+    plans?: Plan[];
+}
+
+const props = withDefaults(defineProps<Props>(), {
+    plans: () => []
+});
+
 // Reactive data
 const searchQuery = ref('');
 const activeCategory = ref('getting-started');
@@ -54,7 +72,7 @@ const faqs = {
         {
             id: 7,
             question: "What payment methods do you accept?",
-            answer: "We accept all major credit cards (Visa, MasterCard, American Express), PayPal, and bank transfers for Enterprise plans. All payments are processed securely through Stripe."
+                            answer: `We accept all major credit cards (Visa, MasterCard, American Express), PayPal, and bank transfers for ${props.plans[2]?.name || 'Enterprise'} plans. All payments are processed securely through Stripe.`
         },
         {
             id: 8,

@@ -10,6 +10,16 @@ import {
 } from 'lucide-vue-next';
 
 // Types
+interface Plan {
+    id: number;
+    name: string;
+    description: string | null;
+    price: number;
+    duration: string;
+    features: string[] | null;
+    is_active: boolean;
+}
+
 interface ChatMessage {
     id: number;
     type: 'user' | 'bot';
@@ -17,6 +27,15 @@ interface ChatMessage {
     timestamp: Date;
     status?: 'sending' | 'sent' | 'delivered' | 'read';
 }
+
+// Props
+interface Props {
+    plans?: Plan[];
+}
+
+const props = withDefaults(defineProps<Props>(), {
+    plans: () => []
+});
 
 // Reactive data
 const chatMessages = ref<ChatMessage[]>([]);
@@ -146,7 +165,7 @@ const getStatusIcon = (status: string) => {
                     </div>
                     <div>
                         <h1 class="text-lg font-semibold text-white">AI Chat Assistant</h1>
-                        <p class="text-xs text-gray-400">Free Plan - Online</p>
+                        <p class="text-xs text-gray-400">{{ props.plans[0]?.name || 'Free Plan' }} - Online</p>
                     </div>
                 </div>
                 <div class="flex items-center space-x-2">
@@ -235,7 +254,7 @@ const getStatusIcon = (status: string) => {
                 <div class="bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl p-4">
                     <div class="flex items-center space-x-3 mb-3">
                         <div class="w-3 h-3 bg-white rounded-full"></div>
-                        <h3 class="text-white font-semibold text-sm">Free Plan</h3>
+                        <h3 class="text-white font-semibold text-sm">{{ props.plans[0]?.name || 'Free Plan' }}</h3>
                     </div>
                     <div class="space-y-2 mb-4">
                         <div class="text-white text-xs">
